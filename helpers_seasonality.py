@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def download_td_test(start_date = "2020-01-01", end_date = "24-05-10"):
+def download_td_test(start_date, end_date):
     # Initialize client
     API_KEY = os.getenv("TD_API_KEY")
     td = TDClient(apikey = API_KEY)
@@ -97,7 +97,3 @@ def return_json_format(input_dataframe):
     dataframe = dataframe.iloc[:, ::-1]
     print(dataframe)
     return dataframe.values.tolist()
-
-
-
-

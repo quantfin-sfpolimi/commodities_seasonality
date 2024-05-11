@@ -6,18 +6,23 @@ from helpers_seasonality import *
 
 app = FastAPI()
 
+@app.get('/')
+async def hello_world():
+    return {"Msg": "Hello World!"}
 
-@app.get('/get-year/{startend}')
-async def get_year(startend: int):
+
+@app.get('/get-seasonality/{startend}')
+async def get_seasonality(startend: int):
 
     string = str(startend)
 
-    start = string[:4]
-    end = string[4:]
+    start = int(string[:4])
+    end = int(string[4:])
 
-    download_td_test(start, end)
+    # working on it...
+    df = download_td_test(start_date = start, end_date = end)
 
-    return {'Start': start, 'End': end}
+    return (list(df.index))
 
 
 
