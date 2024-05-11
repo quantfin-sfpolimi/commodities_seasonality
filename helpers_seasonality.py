@@ -2,11 +2,15 @@ from twelvedata import TDClient
 import pandas as pd
 from datetime import datetime
 import time
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-def download_td_test(api_key, start_date = "2020-01-01", end_date="24-05-10")
-    # Initialize client - apikey parameter is requiered
-    td = TDClient(apikey=api_key)
+def download_td_test(start_date = "2020-01-01", end_date = "24-05-10"):
+    # Initialize client
+    API_KEY = os.getenv("TD_API_KEY")
+    td = TDClient(apikey = API_KEY)
 
     # Construct the necessary time series
     ts = td.time_series(
