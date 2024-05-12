@@ -4,7 +4,7 @@ from datetime import datetime
 import time
 
 
-def download_td_test(api_key, start_date = "2020-01-01", end_date="24-05-10")
+def download_td_test(api_key, start_date = "2020-01-01", end_date="24-05-10"):
     # Initialize client - apikey parameter is requiered
     td = TDClient(apikey=api_key)
 
