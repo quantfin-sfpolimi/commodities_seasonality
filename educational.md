@@ -10,7 +10,7 @@ Commodities like agricultural products and energy resources often display pronou
 
 Major currency pairs, blue-chip stocks, and government bonds generally experience lower levels of seasonality. These assets are often influenced more by broader economic trends and geopolitical factors rather than seasonal fluctuations.
 
+### ISTRUCTION TOOL
+Our seasonality tool not only provides a detailed overview of seasonal patterns in financial markets but can also serve as a valuable educational tool for understanding macroeconomic concepts. By exploring asset seasonal patterns, users can gain a better understanding of the economic backdrop and market trends.
 
-
-
-
+However, it is crucial to clarify that seasonal analysis does not constitute investment advice or provide guidance for market timing or active trading. Users are advised to use this information as part of a broader strategy and always consult a qualified financial advisor before making investment decisions.
