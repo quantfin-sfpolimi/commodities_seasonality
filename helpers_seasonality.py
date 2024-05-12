@@ -156,7 +156,7 @@ def plot_single_year(startend, ticker):
 
     for i in range(start, end):
         start_date = str(i) + "-01-01"
-        end_date = str(i+1) + "-01-01"
+        end_date = str(i) + "-12-31"
     
         df1 = download_td_test(start_date, end_date, ticker)
         print(df1)
@@ -170,7 +170,7 @@ def plot_single_year(startend, ticker):
         print(type(dataframe))
 
         for row, index in dataframe.iterrows():
-            new_date = datetime.strptime("2024-"+str(row)[5:], "%Y-%m-%d %H:%M:%S")#.strftime("%m-%d-%Y")
+            new_date = datetime.strptime("2023-"+str(row)[5:], "%Y-%m-%d %H:%M:%S")#.strftime("%m-%d-%Y")
             
             epoch = int(time.mktime(new_date.timetuple()) * 1000)
             print(new_date, epoch)
