@@ -88,12 +88,27 @@ def return_json_format(input_dataframe):
     dataframe = input_dataframe.copy()
 
     for row, index in dataframe.iterrows():
-      new_date = datetime.strptime("2024"+"-"+str(row), "%Y-%j")#.strftime("%m-%d-%Y")
-      #print(new_date)
-
-      epoch = time.mktime(new_date.timetuple())
-      dataframe.at[row,"epoch"] = epoch
+        new_date = datetime.strptime("2024"+"-"+str(row), "%Y-%j")#.strftime("%m-%d-%Y")
+        #print(new_date)
+        
+        epoch = time.mktime(new_date.timetuple())
+        dataframe.at[row,"epoch"] = epoch
 
     dataframe = dataframe.iloc[:, ::-1]
-    print(dataframe)
-    return dataframe.values.tolist()
+
+    dataframe_list = dataframe.values.tolist()
+
+    return dataframe_list
+
+'''
+df = download_td_test(start_date = '2018-01-01', end_date = '2022-01-01')
+df1 = manage_seasonality(df)
+df2 = calculate_seasonality(df1)
+finale = return_json_format(df2)
+
+output = []
+for index, 
+
+print(output)
+
+'''

@@ -16,15 +16,21 @@ async def get_seasonality(startend: int):
 
     string = str(startend)
 
-    start = int(string[:4])
-    end = int(string[4:])
+    start = string[:4]
+    end = string[4:]
 
     # working on it...
+
+    start_date = start + '-01-01'
+    end_date = end + '-01-01'
+
     df = download_td_test(start_date = start, end_date = end)
+    df1 = manage_seasonality(df)
+    df2 = calculate_seasonality(df1)
+    finale = return_json_format(df2)
 
-    return (list(df.index))
 
-
+    return finale
 
 
 
