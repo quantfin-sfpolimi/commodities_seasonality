@@ -2,17 +2,19 @@ from twelvedata import TDClient
 import pandas as pd
 from datetime import datetime
 import time
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-def download_td_test(api_key, start_date = "2020-01-01", end_date="24-05-10"):
-    # Initialize client - apikey parameter is requiered
-    
+def download_td_test(start_date, end_date, ticker):
+    # Initialize client
     API_KEY = os.getenv("TD_API_KEY")
     td = TDClient(apikey = API_KEY)
 
     # Construct the necessary time series
     ts = td.time_series(
-        symbol="AAPL",
+        symbol=ticker,
         interval="1day",
         outputsize=2000,
         timezone="America/New_York",
@@ -68,7 +70,6 @@ def calculate_seasonality(input_dataframe, excluded_years=[]):
 
   seasonal_dataframe = input_dataframe.copy()
   seasonal_dataframe.drop(excluded_years, axis = 1, inplace = True)
-  seasonal_dataframe.drop(excluded_years, axis = 1, inplace = True)
 
 
   return seasonal_dataframe.mean(axis = 1).to_frame()
@@ -87,16 +88,27 @@ def return_json_format(input_dataframe):
     dataframe = input_dataframe.copy()
 
     for row, index in dataframe.iterrows():
-      new_date = datetime.strptime("2024"+"-"+str(row), "%Y-%j")#.strftime("%m-%d-%Y")
-      #print(new_date)
-
-      epoch = time.mktime(new_date.timetuple())
-      dataframe.at[row,"epoch"] = epoch
+        new_date = datetime.strptime("2024"+"-"+str(row), "%Y-%j")#.strftime("%m-%d-%Y")
+        #print(new_date)
+        
+        epoch = int(time.mktime(new_date.timetuple()) * 1000)
+        dataframe.at[row,"epoch"] = epoch
 
     dataframe = dataframe.iloc[:, ::-1]
-    print(dataframe)
-    return dataframe.values.tolist()
 
+    dataframe_list = dataframe.values.tolist()
 
+    return dataframe_list
 
+'''
+df = download_td_test(start_date = '2018-01-01', end_date = '2022-01-01')
+df1 = manage_seasonality(df)
+df2 = calculate_seasonality(df1)
+finale = return_json_format(df2)
 
+output = []
+for index, 
+
+print(output)
+
+'''
