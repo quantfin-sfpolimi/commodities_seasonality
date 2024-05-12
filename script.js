@@ -16,7 +16,6 @@ inputForm.addEventListener("submit", (e) => {
 
 
     
-    // to be fixed. https:// should be removed, but when done it concatenates the acrual url with 127.0.0.1/800/...
-    url = 'https://127.0.0.1:8000/' + 'get-year/' + start + end
+    url = 'http://127.0.0.1:8000/' + 'get-year/' + start + end
     window.location.href = url
 })
