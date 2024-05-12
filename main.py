@@ -11,20 +11,20 @@ async def hello_world():
     return {"Msg": "Hello World!"}
 
 
-@app.get('/get-seasonality/{startend}')
-async def get_seasonality(startend: int):
+@app.get('/get-seasonality/{ticker}/{startend}')
+async def get_seasonality(startend: int, ticker: str):
 
     string = str(startend)
 
     start = string[:4]
     end = string[4:]
 
-    # working on it...
+    ticker = ticker + '/USD'
 
     start_date = start + '-01-01'
     end_date = end + '-01-01'
 
-    df = download_td_test(start_date = start, end_date = end)
+    df = download_td_test(start_date = start, end_date = end, ticker = ticker)
     df1 = manage_seasonality(df)
     df2 = calculate_seasonality(df1)
     finale = return_json_format(df2)

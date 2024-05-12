@@ -7,14 +7,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def download_td_test(start_date, end_date):
+def download_td_test(start_date, end_date, ticker):
     # Initialize client
     API_KEY = os.getenv("TD_API_KEY")
     td = TDClient(apikey = API_KEY)
 
     # Construct the necessary time series
     ts = td.time_series(
-        symbol="AAPL",
+        symbol=ticker,
         interval="1day",
         outputsize=2000,
         timezone="America/New_York",
@@ -91,7 +91,7 @@ def return_json_format(input_dataframe):
         new_date = datetime.strptime("2024"+"-"+str(row), "%Y-%j")#.strftime("%m-%d-%Y")
         #print(new_date)
         
-        epoch = time.mktime(new_date.timetuple())
+        epoch = int(time.mktime(new_date.timetuple()) * 1000)
         dataframe.at[row,"epoch"] = epoch
 
     dataframe = dataframe.iloc[:, ::-1]

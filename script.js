@@ -30,6 +30,7 @@ inputForm.addEventListener("submit", (e) => {
 
   let start = document.getElementById("startYear").value
   let end = document.getElementById("endYear").value
+  let ticker = document.getElementById("ticker").value
       
   let input = {
     "start": parseInt(start),
@@ -38,7 +39,7 @@ inputForm.addEventListener("submit", (e) => {
 
   console.log(input)
 
-  url = 'http://127.0.0.1:8000/' + 'get-seasonality/' + start + end
+  url = 'http://127.0.0.1:8000/' + 'get-seasonality/' + ticker + '/' + start + end
   console.log(url)
   //window.location.href = url
 
