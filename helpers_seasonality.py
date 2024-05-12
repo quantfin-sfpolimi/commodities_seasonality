@@ -6,7 +6,9 @@ import time
 
 def download_td_test(api_key, start_date = "2020-01-01", end_date="24-05-10"):
     # Initialize client - apikey parameter is requiered
-    td = TDClient(apikey=api_key)
+    
+    API_KEY = os.getenv("TD_API_KEY")
+    td = TDClient(apikey = API_KEY)
 
     # Construct the necessary time series
     ts = td.time_series(
@@ -65,6 +67,7 @@ def calculate_seasonality(input_dataframe, excluded_years=[]):
 
 
   seasonal_dataframe = input_dataframe.copy()
+  seasonal_dataframe.drop(excluded_years, axis = 1, inplace = True)
   seasonal_dataframe.drop(excluded_years, axis = 1, inplace = True)
 
 
