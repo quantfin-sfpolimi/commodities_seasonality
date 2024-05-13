@@ -1,6 +1,6 @@
 from twelvedata import TDClient
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 import os
 from dotenv import load_dotenv
