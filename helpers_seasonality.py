@@ -7,24 +7,76 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def download_td_test(start_date, end_date):
+def concat_data(td, end_date, output_size, ticker, interval):
+
+    data_to_load_tmp = output_size
+    tmp_data = end_date
+    parts = []
+    concat = 0
+    flag = 0
+
+    for i in range(0, (output_size // 5000)+1):
+
+        # activate only if output_size is grater than 5000
+        if (data_to_load_tmp >= 5000):
+            print('downloading with concatenation')
+            ts = td.time_series(
+                symbol=ticker,
+                interval=interval,
+                outputsize=5000,
+                end_date = tmp_data,
+                timezone="America/New_York",
+            ).as_pandas()
+            data_to_load_tmp -= 5000
+            parts.append(ts)
+            tmp_data = parts[i-1].index.tolist()[-1] - timedelta(days=1)
+            concat = 1
+
+        # activate when output_size is smaller than 5000 or to download the last part of the concatenated df
+        if (data_to_load_tmp < 5000 and flag == 0):
+            print('downloading without concatenation')
+            ts = td.time_series(
+                symbol=ticker,
+                interval=interval,
+                outputsize=data_to_load_tmp,
+                end_date = tmp_data,
+                timezone="America/New_York",
+            ).as_pandas()
+            parts.append(ts)
+            flag = 1
+    
+    # if the df has multiple parts it returns it else it returns only the simple df
+    if(concat == 1):
+        print(concat)
+        print(parts)
+        return pd.concat(parts)
+    else:
+        return parts[0]
+    
+
+def download_td(start_date, end_date, ticker):
     # Initialize client
     API_KEY = os.getenv("TD_API_KEY")
     td = TDClient(apikey = API_KEY)
 
-    # Construct the necessary time series
-    ts = td.time_series(
-        symbol="AAPL",
-        interval="1day",
-        outputsize=2000,
-        timezone="America/New_York",
-        start_date = start_date,
-        end_date = end_date
-    )
+    #time format for strptime function
+    date_format = "%Y-%m-%d"
 
-    # Returns pandas.DataFrame
-    data = ts.as_pandas()
-    return data
+    #outputsize, timedelta between end_date and start_date
+    output_size = (parser.parse(end_date) - parser.parse(start_date)).days
+    print(output_size)
+
+    # Construct the necessary time series and Returns pandas.DataFrame
+    data = concat_data(td, start_date, end_date, output_size, ticker, '1day')
+    
+    tmp = datetime.strptime(start_date, date_format)
+
+    #slicing dataframe> if the final is an holiday day, it add a day until it find it as a tarding day
+    while True:
+        try:
+            return data.iloc[:data.index.get_loc(tmp)]
+        except:
+            tmp = tmp + timedelta(days=1)
 
 def manage_seasonality(input_dataframe, excluded_years = []):
     min_years_local = 1
