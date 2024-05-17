@@ -33,6 +33,14 @@ async def get_seasonality(startend: int, ticker: str):
     return finale
 
 
+@app.get('/get-seasonality/{ticker}/{startend}/history')
+async def get_seasonality(startend: int, ticker: str):
+    return plot_single_year(startend=startend, ticker = ticker)
+
+    
+
+
+    return finale
 
 
 

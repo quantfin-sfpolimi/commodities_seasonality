@@ -1,6 +1,26 @@
 async function display_chart(url) {
 
-  const data = await fetch(url).then(response => response.json());
+  const data_seasonality = await fetch(url).then(response => response.json());
+  const data_single_year = await fetch(url+"/history").then(response => response.json());
+
+  var chart_series = []
+
+  chart_series.push({
+    name: "Seasonality",
+    data: data_seasonality
+  })
+
+  for (obj in data_single_year) {
+  	var data = [];
+    data_single_year[obj].forEach(function(el) {
+    	data.push(eval(el));
+    });
+    chart_series.push({
+    	name: obj,
+    	data: data
+    });
+
+
 
   // Create the chart
   Highcharts.stockChart('container-chart', {
@@ -12,14 +32,9 @@ async function display_chart(url) {
         text: 'Seasonality'
     },
 
-    series: [{
-        name: 'Seasonality',
-        data: data,
-        tooltip: {
-            valueDecimals: 3
-        }
-    }]
+    series: chart_series
   });
+}
 }
 
 let inputForm = document.getElementById('inputForm')

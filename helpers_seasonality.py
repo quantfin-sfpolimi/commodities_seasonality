@@ -27,7 +27,7 @@ def download_td_test(start_date, end_date, ticker):
     return data
 
 def manage_seasonality(input_dataframe, excluded_years = []):
-    min_years_local = 1
+    
 
 
     stock_dataframe = input_dataframe.copy()
@@ -37,11 +37,6 @@ def manage_seasonality(input_dataframe, excluded_years = []):
 
     stock_dataframe["year"] = pd.to_datetime(stock_dataframe.index).year
     #stock_dataframe["day"] = 0
-
-    #check if enough years:
-    if (len(years_array) - len(excluded_years)) < min_years_local:
-        print("Error, insert more years")
-        return False
 
     for row, index in stock_dataframe.iterrows():
         #calculate day of the year of each date
@@ -100,15 +95,50 @@ def return_json_format(input_dataframe):
 
     return dataframe_list
 
-'''
-df = download_td_test(start_date = '2018-01-01', end_date = '2022-01-01')
-df1 = manage_seasonality(df)
-df2 = calculate_seasonality(df1)
-finale = return_json_format(df2)
+def check_years(startend):
+    string = str(startend)
 
-output = []
-for index, 
+    start = int(string[:4])
+    end = int(string[4:])
+    
+    if (end-start) < 4:
+        return False
+    
+    return True
+    
+def plot_seasonality(startend, ticker):
+    
+    
+    string = str(startend)
+    start = string[:4]
+    end = string[4:]
+    
+    
+    start_date = start + "-01-01"
+    end_date = end + "-01-01"
+    
+    df1 = download_td_test(start_date, end_date, ticker)
+    df2 = calculate_seasonality(manage_seasonality(df1))
+    
+    final_json = return_json_format(df2)
+    
+    return final_json
+    
+def plot_single_year(startend,ticker):
+    string = str(startend)
 
-print(output)
+    start = int(string[:4])
+    end = int(string[4:])
+    
+    single_year_data = {}
+    
 
-'''
+    for i in range(start,end-1):
+        single_startend =  int(str(i)+str(i+1))
+        
+        single_year_data[i] = plot_seasonality(single_startend, ticker)
+    
+    return single_year_data
+
+
+print(plot_single_year(20202024,"AAPL"))
