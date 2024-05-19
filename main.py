@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Path
 from pydantic import BaseModel
 from typing import Optional
+import json
 
 from helpers_seasonality import *
 
@@ -32,6 +33,13 @@ async def get_seasonality(startend: int, ticker: str):
 
     return finale
 
+
+@app.get('/get-seasonality/{ticker}/{startend}/history')
+async def get_seasonality(startend: int, ticker: str):
+    ticker = ticker + '/USD'
+
+    variabile = plot_single_year(startend = startend, ticker = ticker)
+    return json.dumps(variabile)
 
 
 
@@ -70,6 +78,7 @@ async def root():
 def get_student(student_id: int):
     return students[student_id]
 
+    
 
 @app.get("/get-by-name/{student_id}")
 def get_by_name(student_id: int, name: Optional[str] = None):

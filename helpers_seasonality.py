@@ -27,9 +27,7 @@ def download_td_test(start_date, end_date, ticker):
     return data
 
 def manage_seasonality(input_dataframe, excluded_years = []):
-    min_years_local = 1
-
-
+    
     stock_dataframe = input_dataframe.copy()
 
     years_array = pd.to_datetime(stock_dataframe.index).year.unique()
@@ -37,11 +35,6 @@ def manage_seasonality(input_dataframe, excluded_years = []):
 
     stock_dataframe["year"] = pd.to_datetime(stock_dataframe.index).year
     #stock_dataframe["day"] = 0
-
-    #check if enough years:
-    if (len(years_array) - len(excluded_years)) < min_years_local:
-        print("Error, insert more years")
-        return False
 
     for row, index in stock_dataframe.iterrows():
         #calculate day of the year of each date
@@ -86,6 +79,7 @@ def return_json_format(input_dataframe):
     """
 
     dataframe = input_dataframe.copy()
+    
 
     for row, index in dataframe.iterrows():
         new_date = datetime.strptime("2024"+"-"+str(row), "%Y-%j")#.strftime("%m-%d-%Y")
@@ -100,15 +94,141 @@ def return_json_format(input_dataframe):
 
     return dataframe_list
 
-'''
-df = download_td_test(start_date = '2018-01-01', end_date = '2022-01-01')
-df1 = manage_seasonality(df)
-df2 = calculate_seasonality(df1)
-finale = return_json_format(df2)
+def check_years(startend):
+    string = str(startend)
 
-output = []
-for index, 
+    start = int(string[:4])
+    end = int(string[4:])
+    
+    if (end-start) < 4:
+        return False
+    
+    return True
+    
+def plot_seasonality(startend, ticker):
 
-print(output)
+    string = str(startend)
+    start = string[:4]
+    end = string[4:]
+    
+    
+    start_date = start + "-01-01"
+    end_date = end + "-01-01"
+    
+    df1 = download_td_test(start_date, end_date, ticker)
+    df2 = calculate_seasonality(manage_seasonality(df1))
+    
+    final_json = return_json_format(df2)
+    
+    return final_json
+    
+def plot_single_year(startend, ticker):
+    
 
-'''
+    # Add 1 year in order to inlude all the months in the end year
+    startend += 1
+
+    string = str(startend)
+
+    start = int(string[:4])
+    end = int(string[4:]) + 1
+    
+    single_year_data = {}
+    
+
+    for i in range(start,end-1):
+        single_startend =  int(str(i)+str(i+1))
+        
+        single_year_data[i] = plot_seasonality(single_startend, ticker)
+    
+
+    return single_year_data
+
+def stdev_seasonality(input_dataframe):
+    
+    dataframe = input_dataframe.copy()
+    
+    for row, index in dataframe.iterrows():
+        #calculate day of the year of each date
+        day = pd.to_datetime(row).timetuple().tm_yday
+        dataframe.at[row, "day"] = int(day)
+    
+    months_serie = pd.Series(pd.date_range("2024-01-01", periods=12, freq="m"))
+    stdev_seasonality_dataframe = pd.DataFrame(index=months_serie)
+    stdev_seasonality_dataframe["STDEV"] = 0
+    
+    
+    
+    for row, index in stdev_seasonality_dataframe.iterrows():
+        #calculate day of the year of each date
+        day = pd.to_datetime(row).timetuple().tm_yday
+        stdev_seasonality_dataframe.at[row, "day"] = int(day)
+    
+
+    stdev_seasonality_dataframe.set_index(stdev_seasonality_dataframe["day"], inplace=True)
+    
+    for x in stdev_seasonality_dataframe["day"]:
+        temp = dataframe["close"].loc[dataframe["day"] == x]
+        print(temp)
+        stdev_current = temp.std()
+        stdev_seasonality_dataframe.at[x, "STDEV"] = stdev_current
+    
+    print(stdev_seasonality_dataframe)
+
+df1_test = download_td_test("2020-01-01", "2024-01-01", "AAPL")
+d2_test = (manage_seasonality(df1_test))
+
+
+
+def monthly_calculations(dataframe):
+    dataframe = dataframe["close"]
+    
+    months_serie = pd.Series(pd.date_range("2024-01-01", periods=12, freq="ME"))
+    monthly_df = pd.DataFrame(index=months_serie)
+    monthly_df["stdev"] = 0.0
+    monthly_df["mean"] = 0.0
+    
+    monthly_dataframe = pd.DataFrame()
+    
+    monthly_dataframe["price"] = dataframe.resample('ME', label = "right").last()
+    monthly_dataframe["variation"] = monthly_dataframe.pct_change()
+    
+    for x in range(1,12):
+        temp = monthly_dataframe.loc[monthly_dataframe.index.month == x]
+        
+        monthly_df.loc[monthly_df.index.month == x, "mean"] = temp["variation"].mean()
+        monthly_df.loc[monthly_df.index.month == x, "stdev"] = temp["variation"].std()
+        
+        
+
+    return monthly_df    
+    
+    
+    
+    
+monthly_test = (monthly_calculations(df1_test))
+def convert_high_chart_list(input_dataframe):
+
+
+    dataframe = input_dataframe.copy()
+    dataframe["epoch"] = 0.0
+    dataframe_list = []
+    for row, index in dataframe.iterrows():
+    
+        
+        epoch = int(time.mktime(row.timetuple()) * 1000)
+        dataframe.at[row,"epoch"] = epoch
+
+    print(dataframe)
+    dataframe = dataframe.iloc[:, ::-1]
+    #print(dataframe.columns)
+    for column in dataframe.columns:
+        if column != "epoch":
+            temp = dataframe.loc[:, ["epoch",column]]
+            print(temp.values.tolist())
+        
+            dataframe_list.append(temp.values.tolist())
+        
+
+
+    return dataframe_list
