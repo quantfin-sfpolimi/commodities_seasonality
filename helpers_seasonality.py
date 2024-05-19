@@ -125,24 +125,27 @@ def plot_seasonality(startend, ticker):
 def plot_single_year(startend, ticker):
     
 
-    # Add 1 year in order to inlude all the months in the end year
+    # Add 1 year in order to include also the end year
     startend += 1
 
     string = str(startend)
 
     start = int(string[:4])
-    end = int(string[4:]) + 1
+    end = int(string[4:])
     
     single_year_data = {}
     
 
-    for i in range(start,end-1):
+    for i in range(start, end):
         single_startend =  int(str(i)+str(i+1))
         
         single_year_data[i] = plot_seasonality(single_startend, ticker)
+        # TODO: cambiare percentuali con prezzi
     
 
-    return single_year_data
+    df = pd.DataFrame.from_dict(single_year_data)
+
+    return df.to_json()
 
 def stdev_seasonality(input_dataframe):
     
@@ -232,3 +235,10 @@ def convert_high_chart_list(input_dataframe):
 
 
     return dataframe_list
+
+
+'''
+startend = 20202023
+ticker = 'XAU/USD'
+print(plot_single_year(startend, ticker).to_json())
+'''

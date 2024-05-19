@@ -36,10 +36,9 @@ async def get_seasonality(startend: int, ticker: str):
 
 @app.get('/get-seasonality/{ticker}/{startend}/history')
 async def get_seasonality(startend: int, ticker: str):
-    ticker = ticker + '/USD'
 
-    variabile = plot_single_year(startend = startend, ticker = ticker)
-    return json.dumps(variabile)
+    df = plot_single_year(startend=startend, ticker=ticker + '/USD')
+    return df
 
 
 
