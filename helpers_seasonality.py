@@ -106,8 +106,7 @@ def check_years(startend):
     return True
     
 def plot_seasonality(startend, ticker):
-    
-    
+
     string = str(startend)
     start = string[:4]
     end = string[4:]
@@ -123,11 +122,16 @@ def plot_seasonality(startend, ticker):
     
     return final_json
     
-def plot_single_year(startend,ticker):
+def plot_single_year(startend, ticker):
+    
+
+    # Add 1 year in order to inlude all the months in the end year
+    startend += 1
+
     string = str(startend)
 
     start = int(string[:4])
-    end = int(string[4:])
+    end = int(string[4:]) + 1
     
     single_year_data = {}
     
@@ -137,6 +141,7 @@ def plot_single_year(startend,ticker):
         
         single_year_data[i] = plot_seasonality(single_startend, ticker)
     
+
     return single_year_data
 
 def stdev_seasonality(input_dataframe):
@@ -178,14 +183,14 @@ d2_test = (manage_seasonality(df1_test))
 def monthly_calculations(dataframe):
     dataframe = dataframe["close"]
     
-    months_serie = pd.Series(pd.date_range("2024-01-01", periods=12, freq="m"))
+    months_serie = pd.Series(pd.date_range("2024-01-01", periods=12, freq="ME"))
     monthly_df = pd.DataFrame(index=months_serie)
     monthly_df["stdev"] = 0.0
     monthly_df["mean"] = 0.0
     
     monthly_dataframe = pd.DataFrame()
     
-    monthly_dataframe["price"] = dataframe.resample('M', label = "right").last()
+    monthly_dataframe["price"] = dataframe.resample('ME', label = "right").last()
     monthly_dataframe["variation"] = monthly_dataframe.pct_change()
     
     for x in range(1,12):
@@ -227,4 +232,3 @@ def convert_high_chart_list(input_dataframe):
 
 
     return dataframe_list
-
