@@ -78,6 +78,7 @@ async def root():
 def get_student(student_id: int):
     return students[student_id]
 
+    
 
 @app.get("/get-by-name/{student_id}")
 def get_by_name(student_id: int, name: Optional[str] = None):
