@@ -28,21 +28,6 @@ async function display_single_years(url) {
   console.log(data_single_year)
 
   let chart_series = []
-  let names = []
-
-  /*
-  for (obj in data_single_year) {
-  	var data = [];
-    data_single_year[obj].forEach(function(el) {
-    	data.push(eval(el));
-    });
-    chart_series.push({
-    	name: obj,
-    	data: data
-    });
-    names.append(str(obj))
-  }
-  */
 
   for (obj in data_single_year) {
     chart_series.push({
@@ -51,56 +36,24 @@ async function display_single_years(url) {
     });
   }
 
+  Highcharts.stockChart('container-chart2', {
+    rangeSelector: {
+        selected: 1
+    },
+
+    title: {
+        text: 'Seasonality'
+    },
+
+    series: chart_series
+    
+  });
 
   
 
 
 
-    /**
-     * Create the chart when all data is loaded
-     * @return {undefined}
-     */
-    function createChart(series) {
-
-        Highcharts.stockChart('container-chart2', {
-
-            rangeSelector: {
-                selected: 4
-            },
-
-            yAxis: {
-                labels: {
-                    format: '{#if (gt value 0)}+{/if}{value}%'
-                },
-                plotLines: [{
-                    value: 0,
-                    width: 2,
-                    color: 'silver'
-                }]
-            },
-
-            plotOptions: {
-                series: {
-                    compare: 'percent',
-                    showInNavigator: true
-                }
-            },
-
-            tooltip: {
-                pointFormat: '<span style="color:{series.color}">' +
-                    '{series.name}</span>: <b>{point.y}</b> ' +
-                    '({point.change}%)<br/>',
-                valueDecimals: 2,
-                split: true
-            },
-
-            series
-        });
-
-    }
-
-    createChart(chart_series);
-
+   
 };
 
 let inputForm = document.getElementById('inputForm')

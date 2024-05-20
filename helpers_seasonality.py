@@ -183,14 +183,14 @@ d2_test = (manage_seasonality(df1_test))
 def monthly_calculations(dataframe):
     dataframe = dataframe["close"]
     
-    months_serie = pd.Series(pd.date_range("2024-01-01", periods=12, freq="ME"))
+    months_serie = pd.Series(pd.date_range("2024-01-01", periods=12, freq="M"))
     monthly_df = pd.DataFrame(index=months_serie)
     monthly_df["stdev"] = 0.0
     monthly_df["mean"] = 0.0
     
     monthly_dataframe = pd.DataFrame()
     
-    monthly_dataframe["price"] = dataframe.resample('ME', label = "right").last()
+    monthly_dataframe["price"] = dataframe.resample('M', label = "right").last()
     monthly_dataframe["variation"] = monthly_dataframe.pct_change()
     
     for x in range(1,12):
