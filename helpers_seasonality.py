@@ -26,6 +26,21 @@ def download_td_test(start_date, end_date, ticker):
     data = ts.as_pandas()
     return data
 
+
+
+def timestamp_and_price(start_date, end_date, ticker):
+
+    couple_array = []
+
+    for year in range(start_date, end_date+1):
+        df = download_td_test(year, year+1, ticker)['open']
+        print(df)
+
+
+timestamp_and_price(2020, 2022, 'XAU/USD')
+
+
+
 def manage_seasonality(input_dataframe, excluded_years = []):
     
     stock_dataframe = input_dataframe.copy()
