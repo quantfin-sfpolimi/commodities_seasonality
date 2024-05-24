@@ -110,7 +110,7 @@ async function display_single_years(url) {
     createChart(chart_series);
 
 
-
+    /*
     (async () => {
 
         const names = ['MSFT', 'AAPL', 'GOOG'];
@@ -119,6 +119,8 @@ async function display_single_years(url) {
          * Create the chart when all data is loaded
          * @return {undefined}
          */
+
+        /*
         function createChart(series) {
     
             Highcharts.stockChart('container-chart1', {
@@ -172,10 +174,12 @@ async function display_single_years(url) {
         const series = await Promise.all(promises);
         console.log('Series:')
         console.log(series)
+    
 
         createChart(series);
     
     })();
+    */
 };
 
 
@@ -204,6 +208,6 @@ inputForm.addEventListener("submit", (e) => {
   console.log(url)
   //window.location.href = url
 
-  //display_seasonality_chart(url)
+  display_seasonality_chart(url)
   display_single_years(url)
 })
