@@ -222,6 +222,8 @@ def stdev_seasonality(input_dataframe):
 
 def monthly_calculations(dataframe):
     dataframe = dataframe["close"]
+    dataframe = dataframe.iloc[::-1]
+
     
     months_serie = pd.Series(pd.date_range("2024-01-01", periods=12, freq="M"))
     monthly_df = pd.DataFrame(index=months_serie)
@@ -233,7 +235,10 @@ def monthly_calculations(dataframe):
     monthly_dataframe["price"] = dataframe.resample('M', label = "right").last()
     monthly_dataframe["variation"] = monthly_dataframe.pct_change()
     
-    for x in range(1,12):
+    print(monthly_dataframe)
+    
+    for x in range(1,13):
+        print(x)
         temp = monthly_dataframe.loc[monthly_dataframe.index.month == x]
         
         monthly_df.loc[monthly_df.index.month == x, "mean"] = temp["variation"].mean()
@@ -253,14 +258,12 @@ def convert_high_chart_list(input_dataframe):
     dataframe["epoch"] = 0.0
     dataframe_list = []
     for row, index in dataframe.iterrows():
-    
         
         epoch = int(time.mktime(row.timetuple()) * 1000)
+        print(row, epoch)
         dataframe.at[row,"epoch"] = epoch
 
-    print(dataframe)
     dataframe = dataframe.iloc[:, ::-1]
-    #print(dataframe.columns)
     for column in dataframe.columns:
         if column != "epoch":
             temp = dataframe.loc[:, ["epoch",column]]
@@ -270,9 +273,53 @@ def convert_high_chart_list(input_dataframe):
         
 
 
-    return dataframe_list
+    return dataframe_list[::-1]
 
 
 
 
-plot_single_year(20202023, "AAPL")
+#plot_single_year(20202023, "AAPL")
+
+def monthly_returns(startend, ticker):
+    startend += 1
+
+    string = str(startend)
+
+    start = (string[:4])
+    end = int(string[4:])
+    
+    start_date = str(start) + "-01-01"
+    end_date = str(end) + "-12-31"
+    
+    df_data = download_td_test(start_date, end_date, ticker)
+    
+
+    monthly = monthly_calculations(df_data)
+    monthly_returns = monthly.drop("stdev", axis = 1)
+
+    monthly_returns_json = convert_high_chart_list(monthly_returns)
+    
+    return monthly_returns_json[0]
+
+def monthly_stdev(startend, ticker):
+    startend += 1
+
+    string = str(startend)
+
+    start = (string[:4])
+    end = int(string[4:])
+    
+    start_date = str(start) + "-01-01"
+    end_date = str(end) + "-12-31"
+    
+    df_data = download_td_test(start_date, end_date, ticker)
+    
+
+    monthly = monthly_calculations(df_data)
+    monthly_stdev = monthly.drop("mean", axis = 1)
+
+    monthly_returns_json = convert_high_chart_list(monthly_stdev)
+    
+    return monthly_returns_json[0]
+
+print(monthly_returns(20202023, "AAPL"))

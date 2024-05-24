@@ -26,6 +26,7 @@ async function display_seasonality_chart(url) {
 
     series: [{
         name: 'Seasonality',
+        
         data: data_seasonality,
         tooltip: {
             valueDecimals: 3
@@ -183,8 +184,55 @@ async function display_single_years(url) {
 };
 
 
+async function display_monthly_returns(url){
+    const data_monthly = await fetch(url+"/monthly").then(response => response.json());
 
+    console.log(data_monthly)
+  // Create the chart
+  Highcharts.stockChart('container-chart3', {
+    rangeSelector: {
+        selected: 1
+    },
 
+    title: {
+        text: 'Monthly Average Returns'
+    },
+
+    series: [{
+        name: 'Monthly Average Returns',
+        data: data_monthly,
+        type: 'histogram',
+        tooltip: {
+            valueDecimals: 3
+        }
+    }]
+  });
+}
+
+async function display_monthly_stdev(url){
+    const data_monthly_stdev = await fetch(url+"/stdev").then(response => response.json());
+
+    console.log(data_monthly_stdev)
+  // Create the chart
+  Highcharts.stockChart('container-chart4', {
+    rangeSelector: {
+        selected: 1
+    },
+
+    title: {
+        text: 'Monthly Standard Deviation of Seasonality'
+    },
+
+    series: [{
+        name: 'Monthly Average Returns',
+        data: data_monthly_stdev,
+        type: 'histogram',
+        tooltip: {
+            valueDecimals: 3
+        }
+    }]
+  });
+}
 
 let inputForm = document.getElementById('inputForm')
 
@@ -210,4 +258,6 @@ inputForm.addEventListener("submit", (e) => {
 
   display_seasonality_chart(url)
   display_single_years(url)
+  display_monthly_returns(url)
+  display_monthly_stdev(url)
 })

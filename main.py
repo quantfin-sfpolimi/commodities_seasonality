@@ -40,11 +40,16 @@ async def get_seasonality(startend: int, ticker: str):
     df = plot_single_year(startend=startend, ticker=ticker + '/USD')
     return df
 
+@app.get('/get-seasonality/{ticker}/{startend}/monthly')
+async def get_monthly_returns(startend: int, ticker: str):
+    data = monthly_returns(startend = startend, ticker = ticker)
+    return data
 
 
-
-
-
+@app.get('/get-seasonality/{ticker}/{startend}/stdev')
+async def get_monthly_returns(startend: int, ticker: str):
+    data = monthly_stdev(startend = startend, ticker = ticker)
+    return data
 
 
 
