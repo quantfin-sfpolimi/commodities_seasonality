@@ -9,14 +9,9 @@ import numpy as np
 import json
 load_dotenv()
 
-<<<<<<< HEAD
 def download_td_test(start_date, end_date, ticker):
     # Initialize client
-=======
-def download_td_test(api_key, start_date = "2020-01-01", end_date="24-05-10"):
-    # Initialize client - apikey parameter is requiered
-    
->>>>>>> 9fa0a56 (excluded years feature, api key)
+
     API_KEY = os.getenv("TD_API_KEY")
     td = TDClient(apikey = API_KEY)
 
