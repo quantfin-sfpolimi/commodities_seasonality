@@ -7,6 +7,14 @@ from helpers_seasonality import *
 
 app = FastAPI()
 
+def change_ticker(ticker):
+    commodities = ['XAU', 'XG', 'XBR', 'XPT']
+    
+    if ticker in commodities:
+        return ticker + "/USD"
+    else:
+        return ticker
+
 @app.get('/')
 async def hello_world():
     return {"Msg": "Hello World!"}
@@ -20,8 +28,8 @@ async def get_seasonality(startend: int, ticker: str):
     start = string[:4]
     end = string[4:]
 
-    ticker = ticker + '/USD'
-
+    ticker = change_ticker(ticker)
+    
     start_date = start + '-01-01'
     end_date = end + '-01-01'
 
@@ -36,8 +44,9 @@ async def get_seasonality(startend: int, ticker: str):
 
 @app.get('/get-seasonality/{ticker}/{startend}/history')
 async def get_seasonality(startend: int, ticker: str):
-
-    df = plot_single_year(startend=startend, ticker=ticker + '/USD')
+    ticker = change_ticker(ticker)
+        
+    df = plot_single_year(startend=startend, ticker=ticker)
     return df
 
 @app.get('/get-seasonality/{ticker}/{startend}/monthly')

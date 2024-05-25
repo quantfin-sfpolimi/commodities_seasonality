@@ -16,8 +16,29 @@ async function display_seasonality_chart(url) {
     console.log(data_seasonality)
   // Create the chart
   Highcharts.stockChart('container-chart1', {
-    rangeSelector: {
-        selected: 1
+   
+    
+    xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: {
+            month: '%b'
+        }
+    },
+    scrollbar: {
+        enabled: true,
+        barBackgroundColor: 'gray',
+        barBorderRadius: 7,
+        barBorderWidth: 0,
+        buttonBackgroundColor: 'gray',
+        buttonBorderWidth: 0,
+        buttonBorderRadius: 7,
+        trackBackgroundColor: 'none',
+        trackBorderWidth: 1,
+        trackBorderRadius: 8,
+        trackBorderColor: '#CCC',
+        dateTimeLabelFormats: {
+            month: '%b'
+        }
     },
 
     title: {
@@ -92,6 +113,12 @@ async function display_single_years(url) {
                 series: {
                     compare: 'percent',
                     showInNavigator: true
+                }
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: {
+                    month: '%b'
                 }
             },
 
@@ -193,6 +220,12 @@ async function display_monthly_returns(url){
     rangeSelector: {
         selected: 1
     },
+    xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: {
+            month: '%b'
+        }
+    },
 
     title: {
         text: 'Monthly Average Returns'
@@ -223,6 +256,13 @@ async function display_monthly_stdev(url){
         text: 'Monthly Standard Deviation of Seasonality'
     },
 
+
+    xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: {
+            month: '%b'
+        }
+    },
     series: [{
         name: 'Monthly Average Returns',
         data: data_monthly_stdev,
