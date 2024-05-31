@@ -142,25 +142,43 @@ def plot_single_year(start, end, ticker):
         end_date = str(i) + "-12-31"
     
         df1 = download_td_test(start_date, end_date, ticker)
+        print(df1)
         df1_columns = df1.columns.values.tolist()
+        print(df1_columns)
         df1_columns.remove("close")
         
         df1.drop(df1_columns, inplace = True, axis = 1)
         
         dataframe = df1.copy()
+        print(type(dataframe))
 
         for row, index in dataframe.iterrows():
-            new_date = datetime.strptime("2023-"+str(row)[5:], "%Y-%m-%d %H:%M:%S")#.strftime("%m-%d-%Y")
+            new_date = datetime.strptime("2024-"+str(row)[5:], "%Y-%m-%d %H:%M:%S")#.strftime("%m-%d-%Y")
             
             epoch = int(time.mktime(new_date.timetuple()) * 1000)
+            print(new_date, epoch)
             dataframe.at[row,"epoch"] = epoch
 
         dataframe = dataframe.iloc[:, ::-1]
+            
+        
+        
         dataframe_list = dataframe.values.tolist()
+     
+        
         single_year_data[i] = dataframe_list[::-1]
 
     return ((json.dumps(single_year_data)))
     
+        single_startend =  int(str(i)+str(i+1))
+        
+        single_year_data[i] = plot_seasonality(single_startend, ticker)
+        # TODO: cambiare percentuali con prezzi
+    
+
+    df = pd.DataFrame.from_dict(single_year_data)
+
+    return df.to_json()
 
 def stdev_seasonality(input_dataframe):
     
