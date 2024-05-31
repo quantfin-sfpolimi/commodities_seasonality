@@ -2,30 +2,40 @@ from fastapi import FastAPI, Path
 from pydantic import BaseModel
 from typing import Optional
 import json
+from fastapi.templating import Jinja2Templates
 
 from helpers_seasonality import *
 
 app = FastAPI()
 
-@app.get('/')
-async def hello_world():
-    return {"Msg": "Hello World!"}
+
+class Asset(BaseModel):
+    ticker: str
+    start: int | None = None
+    end: int | None = None
 
 
-@app.get('/get-seasonality/{ticker}/{startend}')
-async def get_seasonality(startend: int, ticker: str):
+def change_ticker(ticker):
+    commodities = ['XAU', 'XG', 'XBR', 'XPT']
+    
+    if ticker in commodities:
+        return ticker + "/USD"
+    else:
+        return ticker
 
-    string = str(startend)
 
-    start = string[:4]
-    end = string[4:]
 
-    ticker = ticker + '/USD'
 
-    start_date = start + '-01-01'
-    end_date = end + '-01-01'
 
-    df = download_td_test(start_date = start, end_date = end, ticker = ticker)
+@app.get('/get-seasonality/{ticker}/')
+async def get_seasonality(ticker: str, start: int=2000, end: int=2023):
+
+    ticker = change_ticker(ticker)
+    
+    start_date = str(start) + '-01-01'
+    end_date = str(end) + '-01-01'
+
+    df = download_td_test(start_date=start, end_date=end, ticker=ticker)
     df1 = manage_seasonality(df)
     df2 = calculate_seasonality(df1)
     finale = return_json_format(df2)
@@ -34,17 +44,25 @@ async def get_seasonality(startend: int, ticker: str):
     return finale
 
 
-@app.get('/get-seasonality/{ticker}/{startend}/history')
-async def get_seasonality(startend: int, ticker: str):
+@app.get('/get-seasonality/{ticker}/history/')
+async def get_seasonality(ticker: str, start: int=2020, end: int=2022):
 
-    df = plot_single_year(startend=startend, ticker=ticker + '/USD')
+    ticker = change_ticker(ticker)
+    df = plot_single_year(ticker=ticker, start=start, end=end)
     return df
 
+@app.get('/get-seasonality/{ticker}/monthly/')
+async def get_monthly_returns(ticker: str, start: int=2020, end: int=2022):
+    startend = str(start) + str(end)
+    data = monthly_returns(ticker = ticker, startend=startend)
+    return data
 
 
-
-
-
+@app.get('/get-seasonality/{ticker}/stdev/')
+async def get_monthly_returns(ticker: str, start: int=2020, end: int=2022):
+    startend = str(start) + str(end)
+    data = monthly_stdev(ticker = ticker, startend=startend)
+    return data
 
 
 

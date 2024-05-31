@@ -4,8 +4,11 @@ from datetime import datetime
 import time
 import os
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
+
+
 
 def download_td_test(start_date, end_date, ticker):
     # Initialize client
@@ -28,19 +31,6 @@ def download_td_test(start_date, end_date, ticker):
 
 
 
-def timestamp_and_price(start_date, end_date, ticker):
-
-    couple_array = []
-
-    for year in range(start_date, end_date+1):
-        df = download_td_test(year, year+1, ticker)['open']
-        print(df)
-
-
-timestamp_and_price(2020, 2022, 'XAU/USD')
-
-
-
 def manage_seasonality(input_dataframe, excluded_years = []):
     
     stock_dataframe = input_dataframe.copy()
@@ -56,11 +46,9 @@ def manage_seasonality(input_dataframe, excluded_years = []):
         day = pd.to_datetime(row).timetuple().tm_yday
         stock_dataframe.at[row, "day"] = int(day)
 
-
     stock_dataframe["date"] = stock_dataframe.index
     stock_dataframe.set_index("day", inplace = True)
     stock_dataframe["close"] = stock_dataframe["close"].rolling(5).mean()
-
 
     returns_dataframe = pd.DataFrame(columns=years_array, index = days_array)
 
@@ -73,14 +61,16 @@ def manage_seasonality(input_dataframe, excluded_years = []):
 
     return returns_dataframe
 
-def calculate_seasonality(input_dataframe, excluded_years=[]):
 
+
+def calculate_seasonality(input_dataframe, excluded_years=[]):
 
   seasonal_dataframe = input_dataframe.copy()
   seasonal_dataframe.drop(excluded_years, axis = 1, inplace = True)
 
-
   return seasonal_dataframe.mean(axis = 1).to_frame()
+
+
 
 def return_json_format(input_dataframe):
     """Given a price time dataframe with n dates, return json object with a [n x 2] array, containing for each
@@ -94,11 +84,10 @@ def return_json_format(input_dataframe):
     """
 
     dataframe = input_dataframe.copy()
-    
+
 
     for row, index in dataframe.iterrows():
         new_date = datetime.strptime("2024"+"-"+str(row), "%Y-%j")#.strftime("%m-%d-%Y")
-        #print(new_date)
         
         epoch = int(time.mktime(new_date.timetuple()) * 1000)
         dataframe.at[row,"epoch"] = epoch
@@ -108,6 +97,8 @@ def return_json_format(input_dataframe):
     dataframe_list = dataframe.values.tolist()
 
     return dataframe_list
+
+
 
 def check_years(startend):
     string = str(startend)
@@ -120,12 +111,13 @@ def check_years(startend):
     
     return True
     
+
+
 def plot_seasonality(startend, ticker):
 
     string = str(startend)
     start = string[:4]
     end = string[4:]
-    
     
     start_date = start + "-01-01"
     end_date = end + "-01-01"
@@ -137,30 +129,38 @@ def plot_seasonality(startend, ticker):
     
     return final_json
     
-def plot_single_year(startend, ticker):
-    
 
+
+def plot_single_year(start, end, ticker):
     # Add 1 year in order to include also the end year
-    startend += 1
-
-    string = str(startend)
-
-    start = int(string[:4])
-    end = int(string[4:])
+    end += 1
     
     single_year_data = {}
     
-
     for i in range(start, end):
-        single_startend =  int(str(i)+str(i+1))
-        
-        single_year_data[i] = plot_seasonality(single_startend, ticker)
-        # TODO: cambiare percentuali con prezzi
+        start_date = str(i) + "-01-01"
+        end_date = str(i) + "-12-31"
     
+        df1 = download_td_test(start_date, end_date, ticker)
+        df1_columns = df1.columns.values.tolist()
+        df1_columns.remove("close")
+        
+        df1.drop(df1_columns, inplace = True, axis = 1)
+        
+        dataframe = df1.copy()
 
-    df = pd.DataFrame.from_dict(single_year_data)
+        for row, index in dataframe.iterrows():
+            new_date = datetime.strptime("2023-"+str(row)[5:], "%Y-%m-%d %H:%M:%S")#.strftime("%m-%d-%Y")
+            
+            epoch = int(time.mktime(new_date.timetuple()) * 1000)
+            dataframe.at[row,"epoch"] = epoch
 
-    return df.to_json()
+        dataframe = dataframe.iloc[:, ::-1]
+        dataframe_list = dataframe.values.tolist()
+        single_year_data[i] = dataframe_list[::-1]
+
+    return ((json.dumps(single_year_data)))
+    
 
 def stdev_seasonality(input_dataframe):
     
@@ -193,8 +193,6 @@ def stdev_seasonality(input_dataframe):
     
     print(stdev_seasonality_dataframe)
 
-df1_test = download_td_test("2020-01-01", "2024-01-01", "AAPL")
-d2_test = (manage_seasonality(df1_test))
 
 
 
@@ -217,27 +215,18 @@ def monthly_calculations(dataframe):
         monthly_df.loc[monthly_df.index.month == x, "mean"] = temp["variation"].mean()
         monthly_df.loc[monthly_df.index.month == x, "stdev"] = temp["variation"].std()
         
-        
-
     return monthly_df    
     
-    
-    
-    
-monthly_test = (monthly_calculations(df1_test))
+
+
 def convert_high_chart_list(input_dataframe):
-
-
     dataframe = input_dataframe.copy()
     dataframe["epoch"] = 0.0
     dataframe_list = []
     for row, index in dataframe.iterrows():
-    
-        
         epoch = int(time.mktime(row.timetuple()) * 1000)
         dataframe.at[row,"epoch"] = epoch
 
-    print(dataframe)
     dataframe = dataframe.iloc[:, ::-1]
     #print(dataframe.columns)
     for column in dataframe.columns:
@@ -246,14 +235,49 @@ def convert_high_chart_list(input_dataframe):
             print(temp.values.tolist())
         
             dataframe_list.append(temp.values.tolist())
-        
+
+    return dataframe_list[::-1]
 
 
-    return dataframe_list
+
+def monthly_returns(startend, ticker):
+    startend += 1
+
+    string = str(startend)
+
+    start = (string[:4])
+    end = int(string[4:])
+    
+    start_date = str(start) + "-01-01"
+    end_date = str(end) + "-12-31"
+    
+    df_data = download_td_test(start_date, end_date, ticker)
+
+    monthly = monthly_calculations(df_data)
+    monthly_returns = monthly.drop("stdev", axis = 1)
+
+    monthly_returns_json = convert_high_chart_list(monthly_returns)
+    
+    return monthly_returns_json[0]
 
 
-'''
-startend = 20202023
-ticker = 'XAU/USD'
-print(plot_single_year(startend, ticker).to_json())
-'''
+
+def monthly_stdev(startend, ticker):
+    startend += 1
+
+    string = str(startend)
+
+    start = (string[:4])
+    end = int(string[4:])
+    
+    start_date = str(start) + "-01-01"
+    end_date = str(end) + "-12-31"
+    
+    df_data = download_td_test(start_date, end_date, ticker)
+
+    monthly = monthly_calculations(df_data)
+    monthly_stdev = monthly.drop("mean", axis = 1)
+
+    monthly_returns_json = convert_high_chart_list(monthly_stdev)
+    
+    return monthly_returns_json[0]

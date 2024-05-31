@@ -13,7 +13,6 @@ async function display_seasonality_chart(url) {
 
   const data_seasonality = await fetch(url).then(response => response.json());
 
-    console.log(data_seasonality)
   // Create the chart
   Highcharts.stockChart('container-chart1', {
     rangeSelector: {
@@ -56,9 +55,6 @@ async function display_single_years(url) {
     	    data: array_list
         });
     }
-
-    console.log('Chart series:')
-    console.log(chart_series)
   
 
   
@@ -179,8 +175,66 @@ async function display_single_years(url) {
 };
 
 
+async function display_monthly_returns(url){
+    const data_monthly = await fetch(url+"/monthly").then(response => response.json());
+
+  // Create the chart
+  Highcharts.stockChart('container-chart3', {
+    rangeSelector: {
+        selected: 1
+    },
+    xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: {
+            month: '%b'
+        }
+    },
+
+    title: {
+        text: 'Monthly Average Returns'
+    },
+
+    series: [{
+        name: 'Monthly Average Returns',
+        data: data_monthly,
+        type: 'histogram',
+        tooltip: {
+            valueDecimals: 3
+        }
+    }]
+  });
+}
+
+async function display_monthly_stdev(url){
+    const data_monthly_stdev = await fetch(url+"/stdev").then(response => response.json());
+
+  // Create the chart
+  Highcharts.stockChart('container-chart4', {
+    rangeSelector: {
+        selected: 1
+    },
+
+    title: {
+        text: 'Monthly Standard Deviation of Seasonality'
+    },
 
 
+    xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: {
+            month: '%b'
+        }
+    },
+    series: [{
+        name: 'Monthly Average Returns',
+        data: data_monthly_stdev,
+        type: 'histogram',
+        tooltip: {
+            valueDecimals: 3
+        }
+    }]
+  });
+}
 
 let inputForm = document.getElementById('inputForm')
 
@@ -192,15 +246,16 @@ inputForm.addEventListener("submit", (e) => {
   let start = document.getElementById("startYear").value
   let end = document.getElementById("endYear").value
   let ticker = document.getElementById("ticker").value
-      
-  let input = {
-    "start": parseInt(start),
-    "end": parseInt(end),
+
+
+
+  //Example of a url with both path and query parameters http://127.0.0.1:8000/items/?skip=0&limit=10
+  path_parameters = 'get-seasonality/' + ticker + '/'
+  query_parameters = ''
+  if (start && end) {
+    query_parameters = '?start=' + start + '&end=' + end
   }
-
-  console.log(input)
-
-  url = 'http://127.0.0.1:8000/' + 'get-seasonality/' + ticker + '/' + start + end
+  url = 'http://127.0.0.1:8000/' + path_parameters + query_parameters
   console.log(url)
   //window.location.href = url
 
