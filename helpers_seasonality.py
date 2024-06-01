@@ -139,23 +139,16 @@ def plot_seasonality(startend, ticker):
     
     return final_json
     
-def plot_single_year(startend, ticker):
+def plot_single_year(start, end, ticker):
     
 
     # Add 1 year in order to include also the end year
-    startend += 1
+    end += 1
 
-    string = str(startend)
-
-    start = int(string[:4])
-    end = int(string[4:])
-    
-    
     
     single_year_data = {}
     
     
-
     for i in range(start, end):
         start_date = str(i) + "-01-01"
         end_date = str(i) + "-12-31"
@@ -189,7 +182,6 @@ def plot_single_year(startend, ticker):
 
     return ((json.dumps(single_year_data)))
     
-
 def stdev_seasonality(input_dataframe):
     
     dataframe = input_dataframe.copy()
