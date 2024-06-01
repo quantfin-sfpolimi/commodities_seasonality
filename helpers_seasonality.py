@@ -134,7 +134,6 @@ def plot_seasonality(startend, ticker):
 def plot_single_year(start, end, ticker):
     # Add 1 year in order to include also the end year
     end += 1
-    
     single_year_data = {}
     
     for i in range(start, end):
@@ -153,7 +152,7 @@ def plot_single_year(start, end, ticker):
         print(type(dataframe))
 
         for row, index in dataframe.iterrows():
-            new_date = datetime.strptime("2024-"+str(row)[5:], "%Y-%m-%d %H:%M:%S")#.strftime("%m-%d-%Y")
+            new_date = datetime.strptime("2023-"+str(row)[5:], "%Y-%m-%d %H:%M:%S")#.strftime("%m-%d-%Y")
             
             epoch = int(time.mktime(new_date.timetuple()) * 1000)
             print(new_date, epoch)
@@ -161,24 +160,13 @@ def plot_single_year(start, end, ticker):
 
         dataframe = dataframe.iloc[:, ::-1]
             
-        
-        
         dataframe_list = dataframe.values.tolist()
      
-        
         single_year_data[i] = dataframe_list[::-1]
 
     return ((json.dumps(single_year_data)))
-    
-        single_startend =  int(str(i)+str(i+1))
-        
-        single_year_data[i] = plot_seasonality(single_startend, ticker)
-        # TODO: cambiare percentuali con prezzi
-    
 
-    df = pd.DataFrame.from_dict(single_year_data)
 
-    return df.to_json()
 
 def stdev_seasonality(input_dataframe):
     
@@ -193,13 +181,10 @@ def stdev_seasonality(input_dataframe):
     stdev_seasonality_dataframe = pd.DataFrame(index=months_serie)
     stdev_seasonality_dataframe["STDEV"] = 0
     
-    
-    
     for row, index in stdev_seasonality_dataframe.iterrows():
         #calculate day of the year of each date
         day = pd.to_datetime(row).timetuple().tm_yday
         stdev_seasonality_dataframe.at[row, "day"] = int(day)
-    
 
     stdev_seasonality_dataframe.set_index(stdev_seasonality_dataframe["day"], inplace=True)
     
@@ -210,7 +195,6 @@ def stdev_seasonality(input_dataframe):
         stdev_seasonality_dataframe.at[x, "STDEV"] = stdev_current
     
     print(stdev_seasonality_dataframe)
-
 
 
 

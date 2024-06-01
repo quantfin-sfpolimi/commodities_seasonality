@@ -34,7 +34,6 @@ async function display_seasonality_chart(url) {
 }
 
 
-
 async function display_single_years(url) {
     const data_single_year = await fetch(url+"/history").then(response => response.json());
     
@@ -172,7 +171,7 @@ async function display_single_years(url) {
         createChart(series);
     
     })();
-};
+}
 
 
 async function display_monthly_returns(url){
@@ -236,8 +235,9 @@ async function display_monthly_stdev(url){
   });
 }
 
-let inputForm = document.getElementById('inputForm')
 
+
+let inputForm = document.getElementById('inputForm')
 
 // The following code is executed when "Submit" button is clicked by the user.
 inputForm.addEventListener("submit", (e) => {
@@ -259,6 +259,6 @@ inputForm.addEventListener("submit", (e) => {
   console.log(url)
   //window.location.href = url
 
-  //display_seasonality_chart(url)
-  display_single_years(url)
+  display_seasonality_chart(url)
+  //display_single_years(url)
 })

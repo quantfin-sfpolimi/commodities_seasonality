@@ -15,6 +15,10 @@ class Asset(BaseModel):
     end: int | None = None
 
 
+default_start = 2000
+default_end = 2022
+
+
 def change_ticker(ticker):
     commodities = ['XAU', 'XG', 'XBR', 'XPT']
     
@@ -25,17 +29,15 @@ def change_ticker(ticker):
 
 
 
-
-
 @app.get('/get-seasonality/{ticker}/')
-async def get_seasonality(ticker: str, start: int=2000, end: int=2023):
+async def get_seasonality(ticker: str, start: int=default_start, end: int=default_end):
 
     ticker = change_ticker(ticker)
     
     start_date = str(start) + '-01-01'
     end_date = str(end) + '-01-01'
 
-    df = download_td_test(start_date=start, end_date=end, ticker=ticker)
+    df = download_td_test(start_date=start_date, end_date=end_date, ticker=ticker)
     df1 = manage_seasonality(df)
     df2 = calculate_seasonality(df1)
     finale = return_json_format(df2)
@@ -45,21 +47,21 @@ async def get_seasonality(ticker: str, start: int=2000, end: int=2023):
 
 
 @app.get('/get-seasonality/{ticker}/history/')
-async def get_seasonality(ticker: str, start: int=2020, end: int=2022):
+async def get_seasonality(ticker: str, start: int=default_start, end: int=default_end):
 
     ticker = change_ticker(ticker)
     df = plot_single_year(ticker=ticker, start=start, end=end)
     return df
 
 @app.get('/get-seasonality/{ticker}/monthly/')
-async def get_monthly_returns(ticker: str, start: int=2020, end: int=2022):
+async def get_monthly_returns(ticker: str, start: int=default_start, end: int=default_end):
     startend = str(start) + str(end)
     data = monthly_returns(ticker = ticker, startend=startend)
     return data
 
 
 @app.get('/get-seasonality/{ticker}/stdev/')
-async def get_monthly_returns(ticker: str, start: int=2020, end: int=2022):
+async def get_monthly_returns(ticker: str, start: int=default_start, end: int=default_end):
     startend = str(start) + str(end)
     data = monthly_stdev(ticker = ticker, startend=startend)
     return data
