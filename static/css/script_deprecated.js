@@ -1,5 +1,7 @@
+console.log("CIAO!")
 
-async function display_seasonality_chart(default_url, query_parameters) {
+
+async function display_seasonality_chart(url) {
     /**
      * Fetches seasonality data from the provided URL and displays it in a Highcharts chart.
      *
@@ -12,8 +14,8 @@ async function display_seasonality_chart(default_url, query_parameters) {
      * 3. Displays the chart in an HTML container with the ID 'container-chart1'.
      */
 
-    url = default_url + query_parameters
-    const data_seasonality = await fetch(url).then(response => response.json());
+
+  const data_seasonality = await fetch(url).then(response => response.json());
 
     console.log(data_seasonality)
   // Create the chart
@@ -59,11 +61,9 @@ async function display_seasonality_chart(default_url, query_parameters) {
 }
 
 
-async function display_single_years(default_url, query_parameters) {
-    
-    url = default_url + 'history/' + query_parameters
 
-    const data_single_year = await fetch(url).then(response => response.json());
+async function display_single_years(url) {
+    const data_single_year = await fetch(url+"/history").then(response => response.json());
     
     dict = JSON.parse(data_single_year)
     let chart_series = []
@@ -215,12 +215,8 @@ async function display_single_years(default_url, query_parameters) {
 };
 
 
-async function display_monthly_returns(default_url, query_parameters){
-    url = default_url + 'monthly/' + query_parameters
-
-    const data_monthly = await fetch(url).then(response => response.json());
-    
-    
+async function display_monthly_returns(url){
+    const data_monthly = await fetch(url+"/monthly").then(response => response.json());
 
     console.log(data_monthly)
   // Create the chart
@@ -250,11 +246,8 @@ async function display_monthly_returns(default_url, query_parameters){
   });
 }
 
-async function display_monthly_stdev(default_url, query_parameters){
-
-    url = default_url + 'stdev/' + query_parameters
-
-    const data_monthly_stdev = await fetch(url).then(response => response.json());
+async function display_monthly_stdev(url){
+    const data_monthly_stdev = await fetch(url+"/stdev").then(response => response.json());
 
     console.log(data_monthly_stdev)
   // Create the chart
@@ -292,23 +285,23 @@ let inputForm = document.getElementById('inputForm')
 inputForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
-    let start = document.getElementById("startYear").value
-    let end = document.getElementById("endYear").value
-    let ticker = document.getElementById("ticker").value
+  let start = document.getElementById("startYear").value
+  let end = document.getElementById("endYear").value
+  let ticker = document.getElementById("ticker").value
       
-  
+  let input = {
+    "start": parseInt(start),
+    "end": parseInt(end),
+  }
 
+  console.log(input)
 
-    path_parameters = 'get-seasonality/' + ticker + '/'
-    default_url = 'http://127.0.0.1:8000/' + path_parameters
-    query_parameters = ''
-    if (start && end) {
-        query_parameters = '?start=' + start + '&end=' + end
-    }
+  url = 'http://127.0.0.1:8000/' + 'get-seasonality/' + ticker + '/' + start + end
+  console.log(url)
+  //window.location.href = url
 
-    display_seasonality_chart(default_url, query_parameters)
-    display_single_years(default_url, query_parameters)
-    display_monthly_returns(default_url,query_parameters)
-    display_monthly_stdev(default_url,query_parameters)
+  display_seasonality_chart(url)
+  display_single_years(url)
+  display_monthly_returns(url)
+  display_monthly_stdev(url)
 })
-
