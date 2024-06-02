@@ -1,6 +1,4 @@
-console.log(ticker)
-console.log(start_year)
-console.log(end_year)
+
 
 
 console.log("SCRIPT JS")
