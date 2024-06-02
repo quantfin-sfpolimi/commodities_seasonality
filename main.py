@@ -40,13 +40,20 @@ default_end = 2022
 
 
 
+@app.get("/tests")
+async def tests(request: Request):
+    context = {}
+    return templates.TemplateResponse(name="tests.html", request=request, context=context)
+
+
+
 @app.get("/")
 async def landing(request: Request):
     """
     Renders the landing page, redirecting you to landing.html.
     """
     context = {}
-    return templates.TemplateResponse(name="landing.html", request=request, context = context)
+    return templates.TemplateResponse(name="landing.html", request=request, context=context)
 
 
 
@@ -56,7 +63,7 @@ async def educational(request: Request):
     Handles GET requests to the /educational endpoint and returns the educational.html template.
     """
     context = {}
-    return templates.TemplateResponse(name="educational.html", request=request, context = context)
+    return templates.TemplateResponse(name="educational.html", request=request, context=context)
 
 
 
@@ -66,7 +73,7 @@ async def about(request: Request):
     Handles GET requests to the /about endpoint and returns the about.html template.
     """
     context = {}
-    return templates.TemplateResponse(name="about.html", request=request, context = context)
+    return templates.TemplateResponse(name="about.html", request=request, context=context)
 
 
 
