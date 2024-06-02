@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-url = "http://127.0.0.1:8000/" + "aapl"
-
-let start_year = document.getElementById("startYear").value
-let end_year = document.getElementById("endYear").value
-let ticker = document.getElementById("ticker").value
-
-url = "/"+ticker+"?start="+start_year.toString() + "&end=" + end_year.toString()
-
-=======
->>>>>>> 37c8ef0fc617875c7d5d31bc22b826afef6d9d90
 function redirect(){
     /**
      * Redirects the user to a URL based on input field values for start year, end year, and ticker.
@@ -33,24 +22,6 @@ function redirect(){
 }
 
 
-<<<<<<< HEAD
-var button = document.getElementById("submit-btn");
-
-
-console.log(button)
-
-button.addEventListener("click", redirect);
-
-
-
-
-
-
-
-
-
-=======
 // Call the redirect function
 let button = document.getElementById("submit-btn");
 button.addEventListener("click", redirect);
->>>>>>> 37c8ef0fc617875c7d5d31bc22b826afef6d9d90
