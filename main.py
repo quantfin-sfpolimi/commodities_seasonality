@@ -27,12 +27,17 @@ def change_ticker(ticker):
     else:
         return ticker
 
-@app.get('/')
-async def hello_world():
-    return {"Msg": "Hello World!"}
 
-default_start = 2000
+default_start = 2012
 default_end = 2022
+
+
+@app.get("/")
+async def landing(request: Request):
+    context = {}
+    return templates.TemplateResponse(name="landing.html", request=request, context = context)
+
+
 
 
 
@@ -69,7 +74,10 @@ async def get_seasonality(ticker: str, start: int=default_start, end: int=defaul
 async def get_seasonality(ticker: str, start: int=default_start, end: int=default_end):
 
     ticker = change_ticker(ticker)
-    df = plot_single_year(ticker=ticker, start=start, end=end)
+    
+    print("fastapi", start,end)
+    
+    df = plot_single_year(start, end, ticker)
     return df
 
 

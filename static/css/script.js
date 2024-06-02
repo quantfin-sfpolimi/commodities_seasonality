@@ -2,6 +2,8 @@ console.log(ticker)
 console.log(start_year)
 console.log(end_year)
 
+
+console.log("SCRIPT JS")
 async function display_seasonality_chart(default_url, query_parameters) {
     /**
      * Fetches seasonality data from the provided URL and displays it in a Highcharts chart.
@@ -16,6 +18,7 @@ async function display_seasonality_chart(default_url, query_parameters) {
      */
 
     url = default_url + query_parameters
+    console.log(url)
     const data_seasonality = await fetch(url).then(response => response.json());
 
     console.log(data_seasonality)
@@ -64,7 +67,7 @@ async function display_seasonality_chart(default_url, query_parameters) {
 
 async function display_single_years(default_url, query_parameters) {
     
-    url = default_url + 'history' + query_parameters
+    url = default_url + '/history' + query_parameters
 
     console.log(url)
 
@@ -221,7 +224,7 @@ async function display_single_years(default_url, query_parameters) {
 
 
 async function display_monthly_returns(default_url, query_parameters){
-    url = default_url + 'monthly' + query_parameters
+    url = default_url + '/monthly' + query_parameters
 
     const data_monthly = await fetch(url).then(response => response.json());
     
@@ -257,7 +260,7 @@ async function display_monthly_returns(default_url, query_parameters){
 
 async function display_monthly_stdev(default_url, query_parameters){
 
-    url = default_url + 'stdev' + query_parameters
+    url = default_url + '/stdev' + query_parameters
 
     const data_monthly_stdev = await fetch(url).then(response => response.json());
 
@@ -306,7 +309,7 @@ window.onload = function load_graphs(){
 
 
     // 'http://127.0.0.1:8000/get-seasonality/TICKER/
-    path_parameters = 'get-seasonality/' + ticker + '/'
+    path_parameters = 'get-seasonality/' + ticker
     default_url = 'http://127.0.0.1:8000/' + path_parameters
     query_parameters = '?start=' + start_year.toString() + '&end=' + end_year.toString()
     

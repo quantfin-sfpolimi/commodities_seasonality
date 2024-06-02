@@ -37,7 +37,6 @@ def timestamp_and_price(start_date, end_date, ticker):
 
     for year in range(start_date, end_date+1):
         df = download_td_test(year, year+1, ticker)['open']
-        print(df)
 
 
 
@@ -100,7 +99,6 @@ def return_json_format(input_dataframe):
 
     for row, index in dataframe.iterrows():
         new_date = datetime.strptime("2024"+"-"+str(row), "%Y-%j")#.strftime("%m-%d-%Y")
-        #print(new_date)
         
         epoch = int(time.mktime(new_date.timetuple()) * 1000)
         dataframe.at[row,"epoch"] = epoch
@@ -141,7 +139,7 @@ def plot_seasonality(startend, ticker):
     
 def plot_single_year(start, end, ticker):
     
-
+    print(start, end, ticker)
     # Add 1 year in order to include also the end year
     end += 1
 
@@ -154,21 +152,17 @@ def plot_single_year(start, end, ticker):
         end_date = str(i) + "-12-31"
     
         df1 = download_td_test(start_date, end_date, ticker)
-        print(df1)
         df1_columns = df1.columns.values.tolist()
-        print(df1_columns)
         df1_columns.remove("close")
         
         df1.drop(df1_columns, inplace = True, axis = 1)
         
         dataframe = df1.copy()
-        print(type(dataframe))
 
         for row, index in dataframe.iterrows():
-            new_date = datetime.strptime("2023-"+str(row)[5:], "%Y-%m-%d %H:%M:%S")#.strftime("%m-%d-%Y")
+            new_date = datetime.strptime("2024-"+str(row)[5:], "%Y-%m-%d %H:%M:%S")#.strftime("%m-%d-%Y")
             
             epoch = int(time.mktime(new_date.timetuple()) * 1000)
-            print(new_date, epoch)
             dataframe.at[row,"epoch"] = epoch
 
         dataframe = dataframe.iloc[:, ::-1]
@@ -207,11 +201,9 @@ def stdev_seasonality(input_dataframe):
     
     for x in stdev_seasonality_dataframe["day"]:
         temp = dataframe["close"].loc[dataframe["day"] == x]
-        print(temp)
         stdev_current = temp.std()
         stdev_seasonality_dataframe.at[x, "STDEV"] = stdev_current
     
-    print(stdev_seasonality_dataframe)
 
 
 def monthly_calculations(dataframe):
@@ -229,10 +221,8 @@ def monthly_calculations(dataframe):
     monthly_dataframe["price"] = dataframe.resample('M', label = "right").last()
     monthly_dataframe["variation"] = monthly_dataframe.pct_change()
     
-    print(monthly_dataframe)
     
     for x in range(1,13):
-        print(x)
         temp = monthly_dataframe.loc[monthly_dataframe.index.month == x]
         
         monthly_df.loc[monthly_df.index.month == x, "mean"] = temp["variation"].mean()
@@ -254,14 +244,12 @@ def convert_high_chart_list(input_dataframe):
     for row, index in dataframe.iterrows():
         
         epoch = int(time.mktime(row.timetuple()) * 1000)
-        print(row, epoch)
         dataframe.at[row,"epoch"] = epoch
 
     dataframe = dataframe.iloc[:, ::-1]
     for column in dataframe.columns:
         if column != "epoch":
             temp = dataframe.loc[:, ["epoch",column]]
-            print(temp.values.tolist())
         
             dataframe_list.append(temp.values.tolist())
         
@@ -316,4 +304,3 @@ def monthly_stdev(startend, ticker):
     
     return monthly_returns_json[0]
 
-print(monthly_returns(20202023, "AAPL"))
