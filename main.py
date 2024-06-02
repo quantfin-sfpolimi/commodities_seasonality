@@ -37,8 +37,15 @@ async def landing(request: Request):
     context = {}
     return templates.TemplateResponse(name="landing.html", request=request, context = context)
 
+@app.get("/educational")
+async def educational(request: Request):
+    context = {}
+    return templates.TemplateResponse(name="educational.html", request=request, context = context)
 
-
+@app.get("/about")
+async def about(request: Request):
+    context = {}
+    return templates.TemplateResponse(name="about.html", request=request, context = context)
 
 
 
