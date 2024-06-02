@@ -1,7 +1,3 @@
-
-
-
-console.log("SCRIPT JS")
 async function display_seasonality_chart(default_url, query_parameters) {
     /**
      * Fetches seasonality data from the provided URL and displays it in a Highcharts chart.
@@ -16,62 +12,54 @@ async function display_seasonality_chart(default_url, query_parameters) {
      */
 
     url = default_url + query_parameters
-    console.log(url)
     const data_seasonality = await fetch(url).then(response => response.json());
 
-    console.log(data_seasonality)
-  // Create the chart
-  Highcharts.stockChart('container-chart1', {
-   
-    
-    xAxis: {
-        type: 'datetime',
-        dateTimeLabelFormats: {
-            month: '%b'
-        }
-    },
-    scrollbar: {
-        enabled: true,
-        barBackgroundColor: 'gray',
-        barBorderRadius: 7,
-        barBorderWidth: 0,
-        buttonBackgroundColor: 'gray',
-        buttonBorderWidth: 0,
-        buttonBorderRadius: 7,
-        trackBackgroundColor: 'none',
-        trackBorderWidth: 1,
-        trackBorderRadius: 8,
-        trackBorderColor: '#CCC',
-        dateTimeLabelFormats: {
-            month: '%b'
-        }
-    },
+    // Create the chart
+    Highcharts.stockChart('container-chart1', {
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                month: '%b'
+            }
+        },
+        scrollbar: {
+            enabled: true,
+            barBackgroundColor: 'gray',
+            barBorderRadius: 7,
+            barBorderWidth: 0,
+            buttonBackgroundColor: 'gray',
+            buttonBorderWidth: 0,
+            buttonBorderRadius: 7,
+            trackBackgroundColor: 'none',
+            trackBorderWidth: 1,
+            trackBorderRadius: 8,
+            trackBorderColor: '#CCC',
+            dateTimeLabelFormats: {
+                month: '%b'
+            }
+        },
 
-    title: {
-        text: 'Seasonality'
-    },
+        title: {
+            text: 'Seasonality'
+        },
 
-    series: [{
-        name: 'Seasonality',
-        
-        data: data_seasonality,
-        tooltip: {
-            valueDecimals: 3
-        }
-    }]
-  });
+        series: [{
+            name: 'Seasonality',
+            data: data_seasonality,
+            tooltip: {
+                valueDecimals: 3
+            }
+        }]
+    });
 }
 
 
+
 async function display_single_years(default_url, query_parameters) {
-    
     url = default_url + '/history' + query_parameters
-
-    console.log(url)
-
     const data_single_year = await fetch(url).then(response => response.json());
-    
     dict = JSON.parse(data_single_year)
+
     let chart_series = []
 
     for (obj in dict) {
@@ -89,25 +77,15 @@ async function display_single_years(default_url, query_parameters) {
         });
     }
 
-    console.log('Chart series:')
-    console.log(chart_series)
-  
-
-  
-
-
     /**
      * Create the chart when all data is loaded
      * @return {undefined}
      */
     function createChart(series) {
-
         Highcharts.stockChart('container-chart2', {
-
             rangeSelector: {
                 selected: 4
             },
-
             yAxis: {
                 labels: {
                     format: '{#if (gt value 0)}+{/if}{value}%'
@@ -118,7 +96,6 @@ async function display_single_years(default_url, query_parameters) {
                     color: 'silver'
                 }]
             },
-
             plotOptions: {
                 series: {
                     compare: 'percent',
@@ -131,7 +108,6 @@ async function display_single_years(default_url, query_parameters) {
                     month: '%b'
                 }
             },
-
             tooltip: {
                 pointFormat: '<span style="color:{series.color}">' +
                     '{series.name}</span>: <b>{point.y}</b> ' +
@@ -139,183 +115,87 @@ async function display_single_years(default_url, query_parameters) {
                 valueDecimals: 2,
                 split: true
             },
-
             series
         });
-
     }
-
     createChart(chart_series);
+}
 
-
-    /*
-    (async () => {
-
-        const names = ['MSFT', 'AAPL', 'GOOG'];
-    
-        /**
-         * Create the chart when all data is loaded
-         * @return {undefined}
-         */
-
-        /*
-        function createChart(series) {
-    
-            Highcharts.stockChart('container-chart1', {
-    
-                rangeSelector: {
-                    selected: 4
-                },
-    
-                yAxis: {
-                    labels: {
-                        format: '{#if (gt value 0)}+{/if}{value}%'
-                    },
-                    plotLines: [{
-                        value: 0,
-                        width: 2,
-                        color: 'silver'
-                    }]
-                },
-    
-                plotOptions: {
-                    series: {
-                        compare: 'percent',
-                        showInNavigator: true
-                    }
-                },
-    
-                tooltip: {
-                    pointFormat: '<span style="color:{series.color}">' +
-                        '{series.name}</span>: <b>{point.y}</b> ' +
-                        '({point.change}%)<br/>',
-                    valueDecimals: 2,
-                    split: true
-                },
-    
-                series
-            });
-    
-        }
-    
-        const promises = names.map(name => new Promise(resolve => {
-            (async () => {
-                const data = await fetch(
-                    'https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/' +
-                    'samples/data/' + name.toLowerCase() + '-c.json'
-                )
-                    .then(response => response.json());
-                resolve({ name, data });
-            })();
-        }));
-    
-        const series = await Promise.all(promises);
-        console.log('Series:')
-        console.log(series)
-    
-
-        createChart(series);
-    
-    })();
-    */
-};
 
 
 async function display_monthly_returns(default_url, query_parameters){
     url = default_url + '/monthly' + query_parameters
-
     const data_monthly = await fetch(url).then(response => response.json());
-    
-    
 
-    console.log(data_monthly)
-  // Create the chart
-  Highcharts.stockChart('container-chart3', {
-    rangeSelector: {
-        selected: 1
-    },
-    xAxis: {
-        type: 'datetime',
-        dateTimeLabelFormats: {
-            month: '%b'
-        }
-    },
+    // Create the chart
+    Highcharts.stockChart('container-chart3', {
+        rangeSelector: {
+            selected: 1
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                month: '%b'
+            }
+        },
 
-    title: {
-        text: 'Monthly Average Returns'
-    },
+        title: {
+            text: 'Monthly Average Returns'
+        },
 
-    series: [{
-        name: 'Monthly Average Returns',
-        data: data_monthly,
-        type: 'histogram',
-        tooltip: {
-            valueDecimals: 3
-        }
-    }]
-  });
+        series: [{
+            name: 'Monthly Average Returns',
+            data: data_monthly,
+            type: 'histogram',
+            tooltip: {
+                valueDecimals: 3
+            }
+        }]
+    });
 }
+
+
 
 async function display_monthly_stdev(default_url, query_parameters){
-
     url = default_url + '/stdev' + query_parameters
-
     const data_monthly_stdev = await fetch(url).then(response => response.json());
 
-    console.log(data_monthly_stdev)
-  // Create the chart
-  Highcharts.stockChart('container-chart4', {
-    rangeSelector: {
-        selected: 1
-    },
-
-    title: {
-        text: 'Monthly Standard Deviation of Seasonality'
-    },
-
-
-    xAxis: {
-        type: 'datetime',
-        dateTimeLabelFormats: {
-            month: '%b'
-        }
-    },
-    series: [{
-        name: 'Monthly Average Returns',
-        data: data_monthly_stdev,
-        type: 'histogram',
-        tooltip: {
-            valueDecimals: 3
-        }
-    }]
-  });
+    // Create the chart
+    Highcharts.stockChart('container-chart4', {
+        rangeSelector: {
+            selected: 1
+        },
+        title: {
+            text: 'Monthly Standard Deviation of Seasonality'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                month: '%b'
+            }
+        },
+        series: [{
+            name: 'Monthly Average Returns',
+            data: data_monthly_stdev,
+            type: 'histogram',
+            tooltip: {
+                valueDecimals: 3
+            }
+        }]
+    });
 }
+
 
 let inputForm = document.getElementById('inputForm')
 
-
 // The following code is executed when "Submit" button is clicked by the user.
 window.onload = function load_graphs(){
-    console.log("pagina caricata")
-
-
-    //let start = document.getElementById("startYear").value
-    //let end = document.getElementById("endYear").value
-    //let ticker = document.getElementById("ticker").value
-      
-  
-
-
-    // 'http://127.0.0.1:8000/get-seasonality/TICKER/
     path_parameters = 'get-seasonality/' + ticker
     default_url = 'http://127.0.0.1:8000/' + path_parameters
     query_parameters = '?start=' + start_year.toString() + '&end=' + end_year.toString()
-    
-
     
     display_seasonality_chart(default_url, query_parameters)
     display_single_years(default_url, query_parameters)
     display_monthly_returns(default_url,query_parameters)
     display_monthly_stdev(default_url,query_parameters)
 }
-
