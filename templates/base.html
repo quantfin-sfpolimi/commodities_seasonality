@@ -9,57 +9,88 @@
             href="{{url_for('static',path='/css/app.css')}}"
             rel="stylesheet"
         />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+            rel="stylesheet"
+        />
         <style>
-            @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
-            @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-            .font-family-montserrat { font-family: montserrat; }
-            .bg-sidebar { background: #E3E3E3; }
-            .cta-btn { color: #3d68ff; }
-            .upgrade-btn { background: #1947ee; }
-            .upgrade-btn:hover { background: #0038fd; }
-            .active-nav-link { background: #1947ee; }
-            .nav-item:hover { background: #FFD100; }
-            .account-link:hover { background: #000000; }
-            
+            @import url("https://fonts.googleapis.com/css?family=Karla:400,700&display=swap");
+            @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+            .font-family-montserrat {
+                font-family: montserrat;
+            }
+            .bg-sidebar {
+                background: #e3e3e3;
+            }
+            .cta-btn {
+                color: #3d68ff;
+            }
+            .upgrade-btn {
+                background: #1947ee;
+            }
+            .upgrade-btn:hover {
+                background: #0038fd;
+            }
+            .active-nav-link {
+                background: #1947ee;
+            }
+            .nav-item:hover {
+                background: #ffd100;
+            }
+            .account-link:hover {
+                background: #000000;
+            }
 
-            
             /* CUSTOM CLASSES */
-            
-            .title-color {}
-            .paragraph-color {}
-            .sidebar-bg {}
-            .main-bg {}
-            .active-nav-link { background: #1947ee; }
-            .nav-item:hover { background: #FFD100; }
+            .active-nav-link {
+                background: #1947ee;
+            }
+            .nav-item:hover {
+                background: #ffd100;
+            }
         </style>
     </head>
     <body>
-
         <h1></h1>
         <h1 class="bg-gray-100">BASE Seasonality</h1>
-     
-        <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
-            <div class="p-6">
-                <a href="index.html" class="text-white text-3xl font-black uppercase hover:text-gray-300">SEASONALITY</a>
 
+        <aside
+            class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl"
+        >
+            <div class="p-6">
+                <a
+                    href="index.html"
+                    class="text-white text-3xl font-black uppercase hover:text-gray-300"
+                    >SEASONALITY</a
+                >
             </div>
             <nav class="text-white text-base font-semibold pt-3">
-                <a href="index.html" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+                <a
+                    href="index.html"
+                    class="flex items-center active-nav-link text-white py-4 pl-6 nav-item"
+                >
                     <i class="fas fa-tachometer-alt mr-3"></i>
                     Educational
                 </a>
-                <a href="blank.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <a
+                    href="blank.html"
+                    class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item"
+                >
                     <i class="fas fa-sticky-note mr-3"></i>
                     How it works
                 </a>
-                <a href="tables.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <a
+                    href="tables.html"
+                    class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item"
+                >
                     <i class="fas fa-table mr-3"></i>
                     About us
                 </a>
-         
             </nav>
-            <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
+            <a
+                href="#"
+                class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4"
+            >
                 <i class="fas fa-arrow-circle-up mr-3"></i>
                 Buy us a coffe!
             </a>
@@ -68,22 +99,20 @@
         <div class="container" id="container-chart2"></div>
         <div class="container" id="container-chart3"></div>
         <div class="container" id="container-chart4"></div>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
         <script type="text/javascript">
             let ticker = "{{ticker}}"
             let start_year = {{start}}
             let end_year = {{end}}
         </script>
-        <script src="{{url_for('static',path='/css/script.js')}}">
-        </script>
+        <script src="{{url_for('static',path='/css/script.js')}}"></script>
 
         <script src="https://code.highcharts.com/stock/highstock.js"></script>
         <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
         <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
         <script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
         <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
-
 
         <script src="{{url_for('node_modules',path='flowbite/dist/flowbite.min.js')}}"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

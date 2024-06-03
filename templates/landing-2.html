@@ -20,8 +20,6 @@
             .font-family-montserrat { font-family: montserrat; }
 
             .cta-btn { color: #3d68ff; }
-            .upgrade-btn { background: #1947ee; }
-            .upgrade-btn:hover { background: #0038fd; }
             .active-nav-link { background: #E3E3E3 }
             .nav-item:hover { background: #FFD100; }
             .account-link:hover { background: #ffee32; }
@@ -32,64 +30,92 @@
             .main-text-color { color: #333333 }
             .sidebar-bg { background: #E3E3E3 }
             .active-nav-link { background: #E3E3E3 }
-            .light-background { background: #FFDC67}
-            .no-underline { text-decoration: none }
+            .default-background { background: #FFD100}
+            .no-link:hover { text-decoration-line: none; color: #333333}
+            .coffee-color:hover { color: #7f4f24 }
             
+            .link-underline {
+                border-bottom-width: 0;
+                background-image: linear-gradient(transparent, transparent), linear-gradient(#fff, #fff);
+                background-size: 0 3px;
+                background-position: 0 100%;
+                background-repeat: no-repeat;
+                transition: background-size .5s ease-in-out;
+            }
+            .link-underline-black {
+                background-image: linear-gradient(transparent, transparent), linear-gradient(#333, #333)
+            }
+            .link-underline-brown {
+                background-image: linear-gradient(transparent, transparent), linear-gradient(#6e3704, #6e3704)
+            }
+
+            .link-underline:hover {
+                background-size: 100% 3px;
+                background-position: 0 100%;
+            }
             
         </style>
     </head>
     <body class="bg-gray-100 main-text-color font-family-montserrat font-black flex">
 
         <aside class="relative h-screen w-30 hidden sm:block shadow-xl">
-            <div class="p-6 light-background">
-                <a href="index.html" class="text-3xl font-black uppercase">
-                    SEASONALITY
+            <div class="p-6 default-background">
+                <a href="index.html" class="text-3xl font-black uppercase no-link">
+                    <span class="link link-underline link-underline-black">SEASONALITY</span>
                 </a>
 
             </div>
             <nav class="text-base font-semibold pt-3 flex flex-col items-center">
-                <button type="submit" formaction="https://www.google.com" class="flex items-center py-4 pl-6 nav-item
-                        w-full
-                        transition duration-500 ease-in-out transform
-                        hover:scale-105
-                        rounded-lg p-4">
+                <a href="/" class="nav-item no-link
+                    w-full flex item-center
+                    transition duration-500 ease-in-out transform
+                    hover:scale-105
+                    rounded-lg p-4
+                    justify-center">
+                    <i class="fas fa-arrow-circle-up mr-3"></i>
                     New Chart
-                </button>
-                <button class="flex items-center py-4 pl-6 nav-item
-                        w-full
-                        transition duration-500 ease-in-out transform
-                        hover:scale-105
-                        rounded-lg p-4">
-                    How It Works 
-                </button>
-                <button class="flex items-center py-4 pl-6 nav-item
-                        w-full
-                        transition duration-500 ease-in-out transform
-                        hover:scale-105
-                        rounded-lg p-4">
-                    Educational 
-                </button>
-                <button class="flex items-center py-4 pl-6 nav-item
-                        w-full
-                        transition duration-500 ease-in-out transform
-                        hover:scale-105
-                        rounded-lg p-4">
-                    About Us 
-                </button>
-            
-                
-                <a href="about" class="flex items-center opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                    <i class="fas fa-table mr-3"></i>
-                    About us
                 </a>
+                <a href="howitworks" class="nav-item no-link 
+                    w-full flex item-center
+                    transition duration-500 ease-in-out transform
+                    hover:scale-105
+                    rounded-lg p-4
+                    justify-center">
+                    <i class="fas fa-arrow-circle-up mr-3"></i>
+                    How It Works
+                </a>
+                <a href="educational" class="nav-item no-link
+                    w-full flex item-center
+                    transition duration-500 ease-in-out transform
+                    hover:scale-105
+                    rounded-lg p-4
+                    justify-center">
+                    <i class="fas fa-arrow-circle-up mr-3"></i>
+                    Educational Page
+                </a>
+                <a href="about" class="nav-item no-link
+                    w-full flex item-center
+                    transition duration-500 ease-in-out transform
+                    hover:scale-105
+                    rounded-lg p-4
+                    justify-center">
+                    <i class="fas fa-arrow-circle-up mr-3"></i>
+                    About Us
+            </a>
          
             </nav>
-            <a href="#" class="absolute w-full upgrade-btn bottom-0 active-nav-link flex items-center justify-center py-4">
+            <a href="#" class="absolute w-full
+                bottom-0 active-nav-link
+                flex items-center justify-center
+                py-4
+                no-link
+                coffee-color">
                 <i class="fas fa-arrow-circle-up mr-3"></i>
-                Buy us a coffe!
+                Buy as a coffee!
             </a>
         </aside>
     </body>
+
          
         <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
         <script type="text/javascript">

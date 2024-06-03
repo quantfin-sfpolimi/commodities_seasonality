@@ -1,49 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+        />
         <link
             href="{{ url_for('static',path='/css/app.css') }}"
             rel="stylesheet"
-    />
+        />
 
-        
         <title>Commodities seasonality</title>
     </head>
     <body>
-        
-
-        
-
         <div class="container">
             <h2 class="text-green-400">How it works</h2>
             <h4>Type a ticker</h4>
-            <h4>Select the time frame </h4>
-            <h4>Analyze the result </h4>
+            <h4>Select the time frame</h4>
+            <h4>Analyze the result</h4>
             <form id="inputForm">
                 <div class="form-group">
                     <label for="startYear">Start Year</label>
-                    <input type="text" class="form-control" id="startYear" placeholder="2000">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="startYear"
+                        placeholder="2000"
+                    />
                 </div>
                 <div class="form-group">
                     <label for="endYear">End Year</label>
-                    <input type="text" class="form-control" id="endYear" placeholder="2024">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="endYear"
+                        placeholder="2024"
+                    />
                 </div>
                 <div class="form-group">
                     <label for="ticker">ticker</label>
-                    <input type="text" class="form-control" id="ticker" placeholder="XAU">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="ticker"
+                        placeholder="XAU"
+                    />
                 </div>
-                <button type="button" class="btn btn-primary" id="submit-btn">Submit</button>
+                <button type="button" class="btn btn-primary" id="submit-btn">
+                    Submit
+                </button>
             </form>
         </div>
 
-         
         <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
-        <script type="text/javascript">
-            
-        </script>
+        <script type="text/javascript"></script>
         <script src="{{url_for('static',path='/css/landing.js')}}"></script>
 
         <script src="https://code.highcharts.com/stock/highstock.js"></script>
