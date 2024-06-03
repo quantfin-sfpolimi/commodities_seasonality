@@ -53,7 +53,7 @@ async def landing(request: Request):
     Renders the landing page, redirecting you to landing.html.
     """
     context = {}
-    return templates.TemplateResponse(name="landing.html", request=request, context=context)
+    return templates.TemplateResponse(name="landing-2.html", request=request, context=context)
 
 
 
